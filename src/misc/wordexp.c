@@ -9,6 +9,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <paths.h>
 #include "pthread_impl.h"
 
 static void reap(pid_t pid)
@@ -35,7 +36,7 @@ static int do_wordexp(const char *s, wordexp_t *we, int flags)
 	int sq=0, dq=0;
 	size_t np=0;
 	char *w, **tmp;
-	char *redir = (flags & WRDE_SHOWERR) ? "" : "2>/dev/null";
+	char *redir = (flags & WRDE_SHOWERR) ? "" : ("2>" _PATH_DEVNULL);
 	int err = 0;
 	FILE *f;
 	size_t wc = 0;
@@ -114,13 +115,13 @@ static int do_wordexp(const char *s, wordexp_t *we, int flags)
 	if (!pid) {
 		if (p[1] == 1) fcntl(1, F_SETFD, 0);
 		else dup2(p[1], 1);
-		execl("/bin/sh", "sh", "-c",
+		execl(_PATH_BSHELL, "sh", "-c",
 			"eval \"printf %s\\\\\\\\0 x $1 $2\"",
 			"sh", s, redir, (char *)0);
 		_exit(1);
 	}
 	close(p[1]);
-	
+
 	f = fdopen(p[0], "r");
 	if (!f) {
 		close(p[0]);

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <byteswap.h>
 #include <errno.h>
+#include <paths.h>
 #include "nscd.h"
 
 int getgrouplist(const char *user, gid_t gid, gid_t *groups, int *ngroups)
@@ -42,7 +43,7 @@ int getgrouplist(const char *user, gid_t gid, gid_t *groups, int *ngroups)
 	}
 	fclose(f);
 
-	f = fopen("/etc/group", "rbe");
+	f = fopen(_PATH_GROUP, "rbe");
 	if (!f && errno != ENOENT && errno != ENOTDIR)
 		goto cleanup;
 

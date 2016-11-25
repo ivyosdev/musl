@@ -2,6 +2,7 @@
 #include <byteswap.h>
 #include <string.h>
 #include <unistd.h>
+#include <paths.h>
 #include "pwf.h"
 #include "nscd.h"
 
@@ -26,7 +27,7 @@ int __getgr_a(const char *name, gid_t gid, struct group *gr, char **buf, size_t 
 	*res = 0;
 
 	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
-	f = fopen("/etc/group", "rbe");
+	f = fopen(_PATH_GROUP, "rbe");
 	if (!f) {
 		rv = errno;
 		goto done;

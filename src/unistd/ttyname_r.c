@@ -1,13 +1,14 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <paths.h>
 
 void __procfdname(char *, unsigned);
 
 int ttyname_r(int fd, char *name, size_t size)
 {
 	struct stat st1, st2;
-	char procname[sizeof "/proc/self/fd/" + 3*sizeof(int) + 2];
+	char procname[sizeof(_PATH_PROC "/self/fd/") + 3*sizeof(int) + 2];
 	ssize_t l;
 
 	if (!isatty(fd)) return ENOTTY;

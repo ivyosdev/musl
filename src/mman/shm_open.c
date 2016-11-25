@@ -5,6 +5,7 @@
 #include <string.h>
 #include <limits.h>
 #include <pthread.h>
+#include <paths.h>
 
 char *__strchrnul(const char *, int);
 
@@ -21,8 +22,13 @@ char *__shm_mapname(const char *name, char *buf)
 		errno = ENAMETOOLONG;
 		return 0;
 	}
-	memcpy(buf, "/dev/shm/", 9);
-	memcpy(buf+9, name, p-name+1);
+	int shmlen = strlen(_PATH_SHM);
+	memcpy(buf, _PATH_SHM, shmlen);
+	if(_PATH_SHM[shmlen-1] != '/') {
+		buf[shmlen] = '/';
+		shmlen++;
+	}
+	memcpy(buf+shmlen, name, p-name+1);
 	return buf;
 }
 

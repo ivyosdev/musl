@@ -63,10 +63,6 @@ typedef struct __res_state {
 
 #define	__RES	19960801
 
-#ifndef _PATH_RESCONF
-#define _PATH_RESCONF        "/etc/resolv.conf"
-#endif
-
 struct res_sym {
 	int number;
 	char *name;

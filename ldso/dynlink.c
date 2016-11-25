@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include <ctype.h>
 #include <dlfcn.h>
+#include <paths.h>
 #include "pthread_impl.h"
 #include "libc.h"
 #include "dynlink.h"
@@ -771,7 +772,7 @@ static int fixup_rpath(struct dso *p, char *buf, size_t buf_size)
 		 * (either system paths or a call to dlopen). */
 		if (libc.secure)
 			return 0;
-		l = readlink("/proc/self/exe", buf, buf_size);
+		l = readlink(_PATH_PROC "/self/exe", buf, buf_size);
 		if (l == -1) switch (errno) {
 		case ENOENT:
 		case ENOTDIR:
@@ -966,7 +967,7 @@ static struct dso *load_library(const char *name, struct dso *needed_by)
 					char *s, *t, *z;
 					for (s=t=z=ldso.name; *s; s++)
 						if (*s=='/') z=t, t=s;
-					prefix_len = z-ldso.name;
+					prefix_len = t-ldso.name;
 					if (prefix_len < PATH_MAX)
 						prefix = ldso.name;
 				}
@@ -975,9 +976,9 @@ static struct dso *load_library(const char *name, struct dso *needed_by)
 					prefix_len = 0;
 				}
 				char etc_ldso_path[prefix_len + 1
-					+ sizeof "/etc/ld-musl-" LDSO_ARCH ".path"];
+					+ sizeof "/ld-musl-" LDSO_ARCH ".path"];
 				snprintf(etc_ldso_path, sizeof etc_ldso_path,
-					"%.*s/etc/ld-musl-" LDSO_ARCH ".path",
+					"%.*s/ld-musl-" LDSO_ARCH ".path",
 					(int)prefix_len, prefix);
 				FILE *f = fopen(etc_ldso_path, "rbe");
 				if (f) {
@@ -990,7 +991,7 @@ static struct dso *load_library(const char *name, struct dso *needed_by)
 					sys_path = "";
 				}
 			}
-			if (!sys_path) sys_path = "/lib:/usr/local/lib:/usr/lib";
+			if (!sys_path) sys_path = _PATH_LIB;
 			fd = path_open(name, sys_path, buf, sizeof buf);
 		}
 		pathname = buf;
@@ -1318,7 +1319,7 @@ static void update_tls_size()
  * following stage 2 and stage 3 functions via primitive symbolic lookup
  * since it does not have access to their addresses to begin with. */
 
-/* Stage 2 of the dynamic linker is called after relative relocations 
+/* Stage 2 of the dynamic linker is called after relative relocations
  * have been processed. It can make function calls to static functions
  * and access string literals and static data, but cannot use extern
  * symbols. Its job is to perform symbolic relocations on the dynamic
@@ -1453,7 +1454,7 @@ _Noreturn void __dls3(size_t *sp)
 		if (app.tls.size) app.tls.image = laddr(&app, tls_image);
 		if (interp_off) ldso.name = laddr(&app, interp_off);
 		if ((aux[0] & (1UL<<AT_EXECFN))
-		    && strncmp((char *)aux[AT_EXECFN], "/proc/", 6))
+		    && strncmp((char *)aux[AT_EXECFN], _PATH_PROC "/", strlen(_PATH_PROC "/")))
 			app.name = (char *)aux[AT_EXECFN];
 		else
 			app.name = argv[0];

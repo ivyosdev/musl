@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <paths.h>
 #include "syscall.h"
 
 #define MAXTRIES 100
@@ -12,7 +13,7 @@ char *__randname(char *);
 char *tmpnam(char *buf)
 {
 	static char internal[L_tmpnam];
-	char s[] = "/tmp/tmpnam_XXXXXX";
+	char s[] = _PATH_TMP "/tmpnam_XXXXXX";
 	int try;
 	int r;
 	for (try=0; try<MAXTRIES; try++) {

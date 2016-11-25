@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #include <fcntl.h>
 #include <unistd.h>
+#include <paths.h>
 
 int daemon(int nochdir, int noclose)
 {
@@ -8,7 +9,7 @@ int daemon(int nochdir, int noclose)
 		return -1;
 	if (!noclose) {
 		int fd, failed = 0;
-		if ((fd = open("/dev/null", O_RDWR)) < 0) return -1;
+		if ((fd = open(_PATH_DEVNULL, O_RDWR)) < 0) return -1;
 		if (dup2(fd, 0) < 0 || dup2(fd, 1) < 0 || dup2(fd, 2) < 0)
 			failed++;
 		if (fd > 2) close(fd);

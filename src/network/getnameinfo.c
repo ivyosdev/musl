@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <ctype.h>
+#include <paths.h>
 #include "lookup.h"
 #include "stdio_impl.h"
 
@@ -50,7 +51,7 @@ static void reverse_hosts(char *buf, const unsigned char *a, unsigned scopeid, i
 	char line[512], *p, *z;
 	unsigned char _buf[1032], atmp[16];
 	struct address iplit;
-	FILE _f, *f = __fopen_rb_ca("/etc/hosts", &_f, _buf, sizeof _buf);
+	FILE _f, *f = __fopen_rb_ca(_PATH_HOSTS, &_f, _buf, sizeof _buf);
 	if (!f) return;
 	if (family == AF_INET) {
 		memcpy(atmp+12, a, 4);
@@ -73,7 +74,7 @@ static void reverse_hosts(char *buf, const unsigned char *a, unsigned scopeid, i
 
 		if (memcmp(a, iplit.addr, 16) || iplit.scopeid != scopeid)
 			continue;
-			
+
 		for (; *p && isspace(*p); p++);
 		for (z=p; *z && !isspace(*z); z++);
 		*z = 0;
@@ -90,7 +91,7 @@ static void reverse_services(char *buf, int port, int dgram)
 	unsigned long svport;
 	char line[128], *p, *z;
 	unsigned char _buf[1032];
-	FILE _f, *f = __fopen_rb_ca("/etc/services", &_f, _buf, sizeof _buf);
+	FILE _f, *f = __fopen_rb_ca(_PATH_SERVICES, &_f, _buf, sizeof _buf);
 	if (!f) return;
 	while (fgets(line, sizeof line, f)) {
 		if ((p=strchr(line, '#'))) *p++='\n', *p=0;
@@ -118,7 +119,7 @@ static int dns_parse_callback(void *c, int rr, const void *data, int len, const 
 	    data, c, 256) <= 0)
 		*(char *)c = 0;
 	return 0;
-	
+
 }
 
 int getnameinfo(const struct sockaddr *restrict sa, socklen_t sl,

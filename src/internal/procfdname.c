@@ -1,7 +1,9 @@
+#include <paths.h>
+
 void __procfdname(char *buf, unsigned fd)
 {
 	unsigned i, j;
-	for (i=0; (buf[i] = "/proc/self/fd/"[i]); i++);
+	for (i=0; (buf[i] = (_PATH_PROC "/self/fd/")[i]); i++);
 	if (!fd) {
 		buf[i] = '0';
 		buf[i+1] = 0;

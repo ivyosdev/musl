@@ -4,6 +4,7 @@
 #include <pty.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <paths.h>
 
 /* Nonstandard, but vastly superior to the standard functions */
 
@@ -12,7 +13,7 @@ int openpty(int *pm, int *ps, char *name, const struct termios *tio, const struc
 	int m, s, n=0, cs;
 	char buf[20];
 
-	m = open("/dev/ptmx", O_RDWR|O_NOCTTY);
+	m = open(_PATH_DEV "/ptmx", O_RDWR|O_NOCTTY);
 	if (m < 0) return -1;
 
 	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
@@ -21,7 +22,7 @@ int openpty(int *pm, int *ps, char *name, const struct termios *tio, const struc
 		goto fail;
 
 	if (!name) name = buf;
-	snprintf(name, sizeof buf, "/dev/pts/%d", n);
+	snprintf(name, sizeof buf, _PATH_DEV "/pts/%d", n);
 	if ((s = open(name, O_RDWR|O_NOCTTY)) < 0)
 		goto fail;
 

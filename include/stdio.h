@@ -154,7 +154,6 @@ char *ctermid(char *);
 
 #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
  || defined(_BSD_SOURCE)
-#define P_tmpdir "/tmp"
 char *tempnam(const char *, const char *);
 #endif
 

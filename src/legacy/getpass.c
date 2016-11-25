@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
+#include <paths.h>
 
 char *getpass(const char *prompt)
 {
@@ -12,7 +13,7 @@ char *getpass(const char *prompt)
 	ssize_t l;
 	static char password[128];
 
-	if ((fd = open("/dev/tty", O_RDWR|O_NOCTTY|O_CLOEXEC)) < 0) return 0;
+	if ((fd = open(_PATH_TTY, O_RDWR|O_NOCTTY|O_CLOEXEC)) < 0) return 0;
 
 	tcgetattr(fd, &t);
 	s = t;

@@ -1,3 +1,4 @@
+#include <paths.h>
 #include "pwf.h"
 
 static FILE *f;
@@ -16,7 +17,7 @@ weak_alias(setpwent, endpwent);
 struct passwd *getpwent()
 {
 	struct passwd *res;
-	if (!f) f = fopen("/etc/passwd", "rbe");
+	if (!f) f = fopen(_PATH_PASSWD, "rbe");
 	if (!f) return 0;
 	__getpwent_a(f, &pw, &line, &size, &res);
 	return res;

@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <limits.h>
+#include <paths.h>
 #include "libc.h"
 
 extern char **__environ;
@@ -19,7 +20,7 @@ int __execvpe(const char *file, char *const argv[], char *const envp[])
 	if (strchr(file, '/'))
 		return execve(file, argv, envp);
 
-	if (!path) path = "/usr/local/bin:/bin:/usr/bin";
+	if (!path) path = _PATH_DEFPATH;
 	k = strnlen(file, NAME_MAX+1);
 	if (k > NAME_MAX) {
 		errno = ENAMETOOLONG;

@@ -1,5 +1,6 @@
 #include <elf.h>
 #include <link.h>
+#include <paths.h>
 #include "libc.h"
 
 #define AUX_CNT 38
@@ -24,7 +25,7 @@ static int static_dl_iterate_phdr(int(*callback)(struct dl_phdr_info *info, size
 			tls_phdr = phdr;
 	}
 	info.dlpi_addr  = base;
-	info.dlpi_name  = "/proc/self/exe";
+	info.dlpi_name  = _PATH_PROC "/self/exe";
 	info.dlpi_phdr  = (void *)aux[AT_PHDR];
 	info.dlpi_phnum = aux[AT_PHNUM];
 	info.dlpi_adds  = 0;

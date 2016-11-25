@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <ctype.h>
 #include <pthread.h>
+#include <paths.h>
 #include "pwf.h"
 
 /* This implementation support Openwall-style TCB passwords in place of
@@ -92,7 +93,7 @@ int getspnam_r(const char *name, struct spwd *sp, char *buf, size_t size, struct
 			return errno;
 		}
 	} else {
-		f = fopen("/etc/shadow", "rbe");
+		f = fopen(_PATH_SHADOW, "rbe");
 		if (!f) return errno;
 	}
 

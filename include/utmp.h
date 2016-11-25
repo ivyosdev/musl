@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <utmpx.h>
+#include <paths.h>
 
 #define ACCOUNTING 9
 #define UT_NAMESIZE 32
@@ -36,9 +37,6 @@ void updwtmp(const char *, const struct utmp *);
 int utmpname(const char *);
 
 int login_tty(int);
-
-#define _PATH_UTMP "/dev/null/utmp"
-#define _PATH_WTMP "/dev/null/wtmp"
 
 #define UTMP_FILE _PATH_UTMP
 #define WTMP_FILE _PATH_WTMP

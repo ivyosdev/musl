@@ -181,8 +181,5 @@ struct mtconfiginfo  {
 #define MT_ST_DEF_COMPRESSION	(MT_ST_DEF_OPTIONS | 0x200000)
 #define MT_ST_DEF_DRVBUFFER	(MT_ST_DEF_OPTIONS | 0x300000)
 #define MT_ST_HPLOADER_OFFSET 10000
-#ifndef DEFTAPE
-# define DEFTAPE	"/dev/tape"
-#endif
 
 #endif

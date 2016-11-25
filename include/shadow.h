@@ -9,8 +9,9 @@ extern "C" {
 #define __NEED_size_t
 
 #include <bits/alltypes.h>
+#include <paths.h>
 
-#define	SHADOW "/etc/shadow"
+#define	SHADOW _PATH_SHADOW
 
 struct spwd {
 	char *sp_namp;

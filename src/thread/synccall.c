@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <ctype.h>
+#include <paths.h>
 #include "futex.h"
 #include "atomic.h"
 #include "../dirent/__dirent.h"
@@ -89,7 +90,7 @@ void __synccall(void (*func)(void *), void *ctx)
 
 	/* Since opendir is not AS-safe, the DIR needs to be setup manually
 	 * in automatic storage. Thankfully this is easy. */
-	dir.fd = open("/proc/self/task", O_RDONLY|O_DIRECTORY|O_CLOEXEC);
+	dir.fd = open(_PATH_PROC "/self/task", O_RDONLY|O_DIRECTORY|O_CLOEXEC);
 	if (dir.fd < 0) goto out;
 
 	/* Initially send one signal per counted thread. But since we can't

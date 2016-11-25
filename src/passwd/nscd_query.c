@@ -5,6 +5,7 @@
 #include <string.h>
 #include <errno.h>
 #include <limits.h>
+#include <paths.h>
 #include "nscd.h"
 
 static const struct {
@@ -12,7 +13,7 @@ static const struct {
 	char sun_path[21];
 } addr = {
 	AF_UNIX,
-	"/var/run/nscd/socket"
+	_PATH_NSCD_SOCKET
 };
 
 FILE *__nscd_query(int32_t req, const char *key, int32_t *buf, size_t len, int *swap)

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <fcntl.h>
+#include <paths.h>
 #include "stdio_impl.h"
 
 #define MAXTRIES 100
@@ -8,7 +9,7 @@ char *__randname(char *);
 
 FILE *tmpfile(void)
 {
-	char s[] = "/tmp/tmpfile_XXXXXX";
+	char s[] = _PATH_TMP "/tmpfile_XXXXXX";
 	int fd;
 	FILE *f;
 	int try;

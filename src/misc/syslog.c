@@ -9,6 +9,7 @@
 #include <pthread.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <paths.h>
 #include "libc.h"
 
 static volatile int lock[2];
@@ -32,7 +33,7 @@ static const struct {
 	char sun_path[9];
 } log_addr = {
 	AF_UNIX,
-	"/dev/log"
+	_PATH_LOG
 };
 
 void closelog(void)
@@ -112,7 +113,7 @@ static void _vsyslog(int priority, const char *message, va_list ap)
 		    || connect(log_fd, (void *)&log_addr, sizeof log_addr) < 0
 		    || send(log_fd, buf, l, 0) < 0)
 		    && (log_opt & LOG_CONS)) {
-			fd = open("/dev/console", O_WRONLY|O_NOCTTY|O_CLOEXEC);
+			fd = open(_PATH_CONSOLE, O_WRONLY|O_NOCTTY|O_CLOEXEC);
 			if (fd >= 0) {
 				dprintf(fd, "%.*s", l-hlen, buf+hlen);
 				close(fd);

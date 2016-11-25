@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <string.h>
 #include <spawn.h>
+#include <paths.h>
 #include "stdio_impl.h"
 #include "syscall.h"
 
@@ -23,7 +24,7 @@ FILE *popen(const char *cmd, const char *mode)
 		errno = EINVAL;
 		return 0;
 	}
-	
+
 	if (pipe2(p, O_CLOEXEC)) return NULL;
 	f = fdopen(p[op], mode);
 	if (!f) {
@@ -51,7 +52,7 @@ FILE *popen(const char *cmd, const char *mode)
 	e = ENOMEM;
 	if (!posix_spawn_file_actions_init(&fa)) {
 		if (!posix_spawn_file_actions_adddup2(&fa, p[1-op], 1-op)) {
-			if (!(e = posix_spawn(&pid, "/bin/sh", &fa, 0,
+			if (!(e = posix_spawn(&pid, _PATH_BSHELL, &fa, 0,
 			    (char *[]){ "sh", "-c", (char *)cmd, 0 }, __environ))) {
 				posix_spawn_file_actions_destroy(&fa);
 				f->pipe_pid = pid;

@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <unistd.h>
+#include <paths.h>
 
 static const char defshells[] = "/bin/sh\n/bin/csh\n";
 
@@ -16,7 +17,7 @@ void endusershell(void)
 
 void setusershell(void)
 {
-	if (!f) f = fopen("/etc/shells", "rbe");
+	if (!f) f = fopen(_PATH_SHELLS, "rbe");
 	if (!f) f = fmemopen((void *)defshells, sizeof defshells - 1, "rb");
 }
 

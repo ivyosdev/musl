@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <paths.h>
 
 /*
  * If lstr is the first part of bstr, check that the next char in bstr
@@ -39,7 +40,7 @@ int fmtmsg(long classification, const char *label, int severity,
 	else if (severity == MM_INFO) errstring = "INFO: ";
 
 	if (classification & MM_CONSOLE) {
-		consolefd = open("/dev/console", O_WRONLY);
+		consolefd = open(_PATH_CONSOLE, O_WRONLY);
 		if (consolefd < 0) {
 			ret = MM_NOCON;
 		} else {

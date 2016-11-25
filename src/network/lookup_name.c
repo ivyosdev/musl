@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <errno.h>
+#include <paths.h>
 #include "lookup.h"
 #include "stdio_impl.h"
 #include "syscall.h"
@@ -51,7 +52,7 @@ static int name_from_hosts(struct address buf[static MAXADDRS], char canon[stati
 	size_t l = strlen(name);
 	int cnt = 0, badfam = 0;
 	unsigned char _buf[1032];
-	FILE _f, *f = __fopen_rb_ca("/etc/hosts", &_f, _buf, sizeof _buf);
+	FILE _f, *f = __fopen_rb_ca(_PATH_HOSTS, &_f, _buf, sizeof _buf);
 	if (!f) switch (errno) {
 	case ENOENT:
 	case ENOTDIR:

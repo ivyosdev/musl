@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <paths.h>
 #include "libc.h"
 
 char *__shm_mapname(const char *, char *);
@@ -110,7 +111,7 @@ sem_t *sem_open(const char *name, int flags, ...)
 		/* Create a temp file with the new semaphore contents
 		 * and attempt to atomically link it as the new name */
 		clock_gettime(CLOCK_REALTIME, &ts);
-		snprintf(tmp, sizeof(tmp), "/dev/shm/tmp-%d", (int)ts.tv_nsec);
+		snprintf(tmp, sizeof(tmp), _PATH_SHM "/tmp-%d", (int)ts.tv_nsec);
 		fd = open(tmp, O_CREAT|O_EXCL|FLAGS, mode);
 		if (fd < 0) {
 			if (errno == EEXIST) continue;

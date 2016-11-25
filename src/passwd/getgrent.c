@@ -1,3 +1,4 @@
+#include <paths.h>
 #include "pwf.h"
 
 static FILE *f;
@@ -16,7 +17,7 @@ struct group *getgrent()
 {
 	struct group *res;
 	size_t size=0, nmem=0;
-	if (!f) f = fopen("/etc/group", "rbe");
+	if (!f) f = fopen(_PATH_GROUP, "rbe");
 	if (!f) return 0;
 	__getgrent_a(f, &gr, &line, &size, &mem, &nmem, &res);
 	return res;
